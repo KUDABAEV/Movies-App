@@ -104,6 +104,7 @@ export default class MovieList extends React.Component {
                                     </div>
                                     <Typography.Paragraph
                                         ellipsis={{rows: 4}}
+
                                         style={{marginBottom: 0}}
                                     >
                                         {movie.overview}
