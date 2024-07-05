@@ -1,6 +1,6 @@
 import React from "react";
 import MoviesApi from "../../api/movies-api";
-import {Card, List, Typography} from "antd";
+import {Alert, Card, List, Spin, Typography} from "antd";
 import './movie-list.css';
 
 
@@ -9,12 +9,29 @@ export default class MovieList extends React.Component {
     movieApi = new MoviesApi();
 
     state = {
-        data: []
+        data: [],
+        loading: true,
+        error: true,
     }
 
     constructor() {
         super();
         this.updateMovie();
+    }
+
+    onMoviesLoaded = (movies) => {
+        this.setState({
+            data: movies,
+            loading: false,
+            error: false,
+        })
+    }
+
+    onError = () => {
+        this.setState({
+            error:true,
+            loading:false,
+        })
     }
 
     updateMovie() {
@@ -23,39 +40,51 @@ export default class MovieList extends React.Component {
             .then((res) => {
                 return res.results;
             })
-            .then((movies) => {
-                this.setState({
-                    data: movies
-                })
-
-            })
+            .then(this.onMoviesLoaded)
+            .catch(this.onError)
     }
 
     render() {
 
-        const {data} = this.state;
+        const {data, loading, error} = this.state;
 
+        const hasData = !(loading || error);
 
-        return <div className='moviesList'>
-            <List
-                grid={{column:2}}
-                renderItem={(movie, index) => {
-                    const myDate = new Date(movie.release_date);
-                    const monthNames = [
-                        "January", "February", "March", "April", "May", "June",
-                        "July", "August", "September", "October", "November", "December"
-                    ];
-                    const releaseDate = monthNames[myDate.getMonth()] + ' ' + myDate.getDate() + ', ' + myDate.getFullYear();
-                    return (
+        const errorAlert = error ? <Alert
+            showIcon
+            message='Ошибка при получения данных'
+            type='error'
+        /> : null;
+
+        const spinner = loading ? <Spin
+            tip='loading'
+            fullscreen={true}
+            className='spinner'
+            spinning={true}
+        >
+        </Spin> : null;
+
+        const content = hasData ? <List
+            grid={{column: 2}}
+            renderItem={(movie, index) => {
+                const myDate = new Date(movie.release_date);
+                const monthNames = [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                const releaseDate = monthNames[myDate.getMonth()] + ' ' + myDate.getDate() + ', ' + myDate.getFullYear();
+
+                return (
+                    <>
                         <Card
                             key={index}
-                            bodyStyle={{padding:0}}
+                            bodyStyle={{padding: 0}}
                             className='movieItem'
                             type='inner'
-                            style={{borderRadius:0, height:279}}
+                            style={{borderRadius: 0, height: 279}}
                         >
-                            <div className='movieItemInner' style={{ display: 'flex' }}>
-                                <div style={{ flex: 1 }}>
+                            <div className='movieItemInner' style={{display: 'flex'}}>
+                                <div style={{flex: 1}}>
                                     <img
                                         className='movieImg'
                                         src={movie.poster_path
@@ -64,7 +93,7 @@ export default class MovieList extends React.Component {
                                         alt="movie"
                                     />
                                 </div>
-                                <div style={{ flex: 2, padding: '16px' }}>
+                                <div style={{flex: 2, padding: '16px'}}>
                                     <div className='movieTitle'>
                                         {movie.title}
                                     </div>
@@ -74,20 +103,26 @@ export default class MovieList extends React.Component {
                                         <div className='badgesItem'>Drama</div>
                                     </div>
                                     <Typography.Paragraph
-                                        ellipsis={{rows:4}}
-                                        style={{marginBottom:0}}
+                                        ellipsis={{rows: 4}}
+                                        style={{marginBottom: 0}}
                                     >
                                         {movie.overview}
                                     </Typography.Paragraph>
                                 </div>
                             </div>
                         </Card>
-                    )
-                }
-                }
-                dataSource={data}
-            >
-            </List>
+                    </>
+                )
+            }
+            }
+            dataSource={data}
+        >
+        </List> : null;
+
+        return <div className='moviesList'>
+            {errorAlert}
+            {spinner}
+            {content}
         </div>
     }
 }
