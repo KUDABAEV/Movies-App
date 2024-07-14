@@ -11,7 +11,7 @@ export default class MovieList extends React.Component {
     state = {
         data: [],
         loading: true,
-        error: true,
+        error: false,
     }
 
     constructor() {
