@@ -61,3 +61,7 @@
     white-space: nowrap;
     padding-top: 15px;
 }
+
+.custom-pagination .ant-pagination-item-active a {
+    color: white; /* Цвет текста ссылки активного элемента */
+}
