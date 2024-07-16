@@ -137,7 +137,15 @@ export default class MovieList extends React.Component {
                                                     return (percent / 10).toFixed(1)
                                                 }}
                                                 size={50}
-                                                strokeColor="#E9D100"
+                                                strokeColor={
+                                                    movie.vote_average >= 0 && movie.vote_average <= 3
+                                                        ? '#E90000'
+                                                        : movie.vote_average > 3 && movie.vote_average <= 5
+                                                            ? '#E97E00'
+                                                            : movie.vote_average > 5 && movie.vote_average <= 7
+                                                                ? '#E9D100'
+                                                                : '#66E900'
+                                                }
                                             />
                                             <div className='movieTitle'>
                                                 {movie.title}
