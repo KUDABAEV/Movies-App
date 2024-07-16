@@ -1,6 +1,6 @@
 import React from "react";
 import MoviesApi from "../../api/movies-api";
-import {Alert, Card, List, Spin, Typography} from "antd";
+import {Alert, Card, List, Progress, Rate, Spin, Typography} from "antd";
 import './movie-list.css';
 
 
@@ -108,7 +108,20 @@ export default class MovieList extends React.Component {
                                         alt="movie"
                                     />
                                 </div>
-                                <div style={{flex: 2, padding: '16px'}}>
+                                <div className='movieContent' style={{flex: 2, padding: '16px'}}>
+                                    <Progress
+                                        className='movieProgress'
+                                        type='circle'
+                                        percent={movie.vote_average * 10}
+                                        format={(percent) => {
+                                            if (!percent) {
+                                                return ''
+                                            }
+                                            return (percent / 10).toFixed(1)
+                                        }}
+                                        size={50}
+                                        strokeColor="#E9D100"
+                                    />
                                     <div className='movieTitle'>
                                         {movie.title}
                                     </div>
@@ -131,6 +144,7 @@ export default class MovieList extends React.Component {
                                     >
                                         {movie.overview}
                                     </Typography.Paragraph>
+                                    <Rate className='rate' count={10} />
                                 </div>
                             </div>
                         </Card>

@@ -2,7 +2,7 @@
     padding: 36px 0;
 }
 .movieItem {
-    margin: 18px;
+    margin: 12px;
     filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
 }
 .movieImg {
@@ -14,6 +14,7 @@
     line-height: 28px;
     color: #000000;
     margin-bottom: 7px;
+    padding-right: 50px;
 }
 .movieDate {
     font-size: 12px;
@@ -45,4 +46,18 @@
     line-height: 22px;
     color: #000000;
 }
-
+.movieContent {
+    position: relative;
+}
+.movieProgress {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 10px;
+    right: 30px;
+    font-size: 20px;
+}
+.rate {
+    white-space: nowrap;
+    padding-top: 15px;
+}
