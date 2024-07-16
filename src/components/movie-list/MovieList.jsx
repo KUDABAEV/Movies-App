@@ -12,11 +12,12 @@ export default class MovieList extends React.Component {
         data: [],
         loading: true,
         error: false,
+        genres: [],
     }
 
-    constructor() {
-        super();
+    componentDidMount() {
         this.updateMovie();
+        this.updateGetGenres();
     }
 
     onMoviesLoaded = (movies) => {
@@ -29,8 +30,8 @@ export default class MovieList extends React.Component {
 
     onError = () => {
         this.setState({
-            error:true,
-            loading:false,
+            error: true,
+            loading: false,
         })
     }
 
@@ -44,9 +45,22 @@ export default class MovieList extends React.Component {
             .catch(this.onError)
     }
 
+    updateGetGenres() {
+        this.movieApi
+            .getGenres()
+            .then((res) => {
+                return res.genres;
+            })
+            .then((genresRes) => {
+                this.setState({
+                    genres: genresRes,
+                })
+            })
+    }
+
     render() {
 
-        const {data, loading, error} = this.state;
+        const {data, loading, error, genres} = this.state;
 
         const hasData = !(loading || error);
 
@@ -67,6 +81,7 @@ export default class MovieList extends React.Component {
         const content = hasData ? <List
             grid={{column: 2}}
             renderItem={(movie, index) => {
+                const movieId = movie.genre_ids;
                 const myDate = new Date(movie.release_date);
                 const monthNames = [
                     "January", "February", "March", "April", "May", "June",
@@ -99,8 +114,15 @@ export default class MovieList extends React.Component {
                                     </div>
                                     <p className='movieDate'>{releaseDate ? releaseDate : 'March 5, 2024'}</p>
                                     <div className='badges'>
-                                        <div className='badgesItem'>Action</div>
-                                        <div className='badgesItem'>Drama</div>
+                                        {genres.map((genre) => {
+                                            if (movieId.includes(genre.id)) {
+                                                return (
+                                                    <div key={genre.id} className='badgesItem'>
+                                                        {genre.name}
+                                                    </div>
+                                                )
+                                            }
+                                        })}
                                     </div>
                                     <Typography.Paragraph
                                         ellipsis={{rows: 4}}
