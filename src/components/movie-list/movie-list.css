@@ -1,65 +1,19 @@
 .moviesList {
     padding: 36px 0;
 }
-.movieItem {
-    margin: 12px;
-    filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
-}
-.movieImg {
-    height: 278px;
-    width: 183px;
-}
-.movieTitle {
-    font-size: 20px;
-    line-height: 28px;
-    color: #000000;
-    margin-bottom: 7px;
-    padding-right: 50px;
-}
+
+
 .movieDate {
     font-size: 12px;
     line-height: 22px;
     color: #827E7E;
-    margin-bottom: 7px;
-}
-.movieItemInner {
-    height: 281px;
+    /*margin-bottom: 7px;*/
 }
 
-.badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 7px;
-}
-.badgesItem {
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 14.52px;
-    background: #FAFAFA;
-    border: 1px solid #D9D9D9;
-    border-radius: 2px;
-    padding: 2px 4px 3px 5px;
-}
 .movieDescription {
     font-size: 12px;
     line-height: 22px;
     color: #000000;
-}
-.movieContent {
-    position: relative;
-}
-.movieProgress {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    top: 10px;
-    right: 30px;
-    font-size: 20px;
-}
-.rate {
-    white-space: nowrap;
-    padding-top: 15px;
 }
 
 .custom-pagination .ant-pagination-item-active a {

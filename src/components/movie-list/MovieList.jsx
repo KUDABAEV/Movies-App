@@ -1,7 +1,21 @@
 import React from "react";
 import MoviesApi from "../../api/movies-api";
-import {Alert, Card, ConfigProvider, List, Progress, Rate, Spin, Typography} from "antd";
+import {Alert, ConfigProvider, List, Spin} from "antd";
 import './movie-list.css';
+import CardItem from "../card";
+
+
+const Spinner = () => {
+    return (
+        <Spin
+            tip='loading'
+            fullscreen={true}
+            className='spinner'
+            spinning={true}
+        />
+
+    )
+}
 
 
 export default class MovieList extends React.Component {
@@ -70,110 +84,51 @@ export default class MovieList extends React.Component {
             type='error'
         /> : null;
 
-        const spinner = loading ? <Spin
-            tip='loading'
-            fullscreen={true}
-            className='spinner'
-            spinning={true}
-        >
-        </Spin> : null;
 
         const content = hasData ?
             <ConfigProvider
                 theme={{
                     components: {
                         Pagination: {
-                            itemActiveBg: '#1890FF', // цвет активного элемента
-                            itemBg: '#f0f0f0', // цвет фона элементов
-                            itemColor: '#000', // цвет текста элементов
+                            itemActiveBg: '#1890FF',
+                            itemBg: '#f0f0f0',
+                            itemColor: '#000',
                         },
                     },
                 }}
             >
                 <List
                     pagination={{
-                        pageSize:6,
+                        pageSize: 6,
                         align: 'center',
                         className: 'custom-pagination',
                     }}
                     grid={{column: 2}}
                     renderItem={(movie, index) => {
-                        const movieId = movie.genre_ids;
                         const myDate = new Date(movie.release_date);
                         const monthNames = [
                             "January", "February", "March", "April", "May", "June",
                             "July", "August", "September", "October", "November", "December"
                         ];
-                        const releaseDate = monthNames[myDate.getMonth()] + ' ' + myDate.getDate() + ', ' + myDate.getFullYear();
 
+                        let releaseDate;
+
+                        if (myDate instanceof Date && !isNaN(myDate)) {
+                            releaseDate = monthNames[myDate.getMonth()] + ' ' + myDate.getDate() + ', ' + myDate.getFullYear();
+                        } else {
+                            releaseDate = 'March 5, 2020';
+                        }
                         return (
-                            <>
-                                <Card
-                                    key={index}
-                                    bodyStyle={{padding: 0}}
-                                    className='movieItem'
-                                    type='inner'
-                                    style={{borderRadius: 0, height: 279}}
-                                >
-                                    <div className='movieItemInner' style={{display: 'flex'}}>
-                                        <div style={{flex: 1}}>
-                                            <img
-                                                className='movieImg'
-                                                src={movie.poster_path
-                                                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                                                    : `https://upload.wikimedia.org/wikipedia/ru/c/ca/Terminator_poster.jpg`}
-                                                alt="movie"
-                                            />
-                                        </div>
-                                        <div className='movieContent' style={{flex: 2, padding: '16px'}}>
-                                            <Progress
-                                                className='movieProgress'
-                                                type='circle'
-                                                percent={movie.vote_average * 10}
-                                                format={(percent) => {
-                                                    if (!percent) {
-                                                        return ''
-                                                    }
-                                                    return (percent / 10).toFixed(1)
-                                                }}
-                                                size={50}
-                                                strokeColor={
-                                                    movie.vote_average >= 0 && movie.vote_average <= 3
-                                                        ? '#E90000'
-                                                        : movie.vote_average > 3 && movie.vote_average <= 5
-                                                            ? '#E97E00'
-                                                            : movie.vote_average > 5 && movie.vote_average <= 7
-                                                                ? '#E9D100'
-                                                                : '#66E900'
-                                                }
-                                            />
-                                            <div className='movieTitle'>
-                                                {movie.title}
-                                            </div>
-                                            <p className='movieDate'>{releaseDate ? releaseDate : 'March 5, 2024'}</p>
-                                            <div className='badges'>
-                                                {genres.map((genre) => {
-                                                    if (movieId.includes(genre.id)) {
-                                                        return (
-                                                            <div key={genre.id} className='badgesItem'>
-                                                                {genre.name}
-                                                            </div>
-                                                        )
-                                                    }
-                                                })}
-                                            </div>
-                                            <Typography.Paragraph
-                                                ellipsis={{rows: 4}}
-
-                                                style={{marginBottom: 0}}
-                                            >
-                                                {movie.overview}
-                                            </Typography.Paragraph>
-                                            <Rate className='rate' count={10} />
-                                        </div>
-                                    </div>
-                                </Card>
-                            </>
+                            <CardItem
+                                movieTitle={movie.title}
+                                index={index}
+                                movieId={movie.genre_ids}
+                                releaseDate={releaseDate}
+                                moviePosterPath={movie.poster_path}
+                                average={movie.vote_average}
+                                movieOverview={movie.overview}
+                                genres={genres}
+                            ></CardItem>
                         )
                     }
                     }
@@ -181,11 +136,11 @@ export default class MovieList extends React.Component {
                 >
                 </List>
             </ConfigProvider>
-             : null;
+            : null;
 
         return <div className='moviesList'>
             {errorAlert}
-            {spinner}
+            {loading && <Spinner/>}
             {content}
         </div>
     }
