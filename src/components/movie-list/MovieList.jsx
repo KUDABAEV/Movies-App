@@ -3,6 +3,7 @@ import MoviesApi from "../../api/movies-api";
 import {Alert, ConfigProvider, List, Spin} from "antd";
 import './movie-list.css';
 import CardItem from "../card";
+import debounce from "lodash/debounce";
 
 
 const Spinner = () => {
@@ -30,8 +31,12 @@ export default class MovieList extends React.Component {
     }
 
     componentDidMount() {
-        this.updateMovie();
-        this.updateGetGenres();
+        this.updateData()
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.searchValue !== this.props.searchValue) {
+           this.updateData()
+        }
     }
 
     onMoviesLoaded = (movies) => {
@@ -51,7 +56,7 @@ export default class MovieList extends React.Component {
 
     updateMovie() {
         this.movieApi
-            .getResource()
+            .getResource(this.props.searchValue)
             .then((res) => {
                 return res.results;
             })
@@ -71,6 +76,13 @@ export default class MovieList extends React.Component {
                 })
             })
     }
+
+    updateData = debounce(
+        () => {
+            this.updateMovie();
+            this.updateGetGenres();
+        },1000
+    )
 
     render() {
 
