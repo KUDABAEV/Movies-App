@@ -48,6 +48,7 @@
 
 .movieItemInner {
     height: 281px;
+    display: flex;
 }
 
 .rate {

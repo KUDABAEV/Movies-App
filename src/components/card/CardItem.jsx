@@ -37,16 +37,17 @@ const customFormat = (percent) => {
 export default class CardItem extends React.Component {
 
     render() {
-        const {index, movieId, releaseDate, moviePosterPath, average, movieTitle, movieOverview, genres} = this.props;
+        const {id, genreIds, releaseDate, moviePosterPath, average, movieTitle, movieOverview, genres} = this.props;
 
         return <Card
-            key={index}
-            bodyStyle={{padding: 0}}
+
+            key={id}
+            styles={{body: {padding: 0}}}
             className='movieItem'
             type='inner'
-            style={{borderRadius: 0, height: 279,}}
+            style={{borderRadius: 0, height: 279, }}
         >
-            <div className='movieItemInner' style={{display: 'flex'}}>
+            <div className='movieItemInner'>
                 <div style={{flex: 1}}>
                     <img
                         className='movieImg'
@@ -69,7 +70,7 @@ export default class CardItem extends React.Component {
                         {movieTitle}
                     </div>
                     <p className='movieDate'>{releaseDate}</p>
-                    <BadgesList id={movieId} list={genres}/>
+                    <BadgesList id={genreIds} list={genres}/>
                     <Typography.Paragraph
                         ellipsis={{rows: 4}}
                         style={{marginBottom: 0}}

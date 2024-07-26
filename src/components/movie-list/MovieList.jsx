@@ -1,10 +1,7 @@
 import React from "react";
-import MoviesApi from "../../api/movies-api";
 import {Alert, ConfigProvider, List, Spin} from "antd";
 import './movie-list.css';
 import CardItem from "../card";
-import debounce from "lodash/debounce";
-
 
 const Spinner = () => {
     return (
@@ -21,73 +18,9 @@ const Spinner = () => {
 
 export default class MovieList extends React.Component {
 
-    movieApi = new MoviesApi();
-
-    state = {
-        data: [],
-        loading: true,
-        error: false,
-        genres: [],
-    }
-
-    componentDidMount() {
-        this.updateData()
-    }
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.searchValue !== this.props.searchValue) {
-           this.updateData()
-        }
-    }
-
-    onMoviesLoaded = (movies) => {
-        this.setState({
-            data: movies,
-            loading: false,
-            error: false,
-        })
-    }
-
-    onError = () => {
-        this.setState({
-            error: true,
-            loading: false,
-        })
-    }
-
-    updateMovie() {
-        this.movieApi
-            .getResource(this.props.searchValue)
-            .then((res) => {
-                return res.results;
-            })
-            .then(this.onMoviesLoaded)
-            .catch(this.onError)
-    }
-
-    updateGetGenres() {
-        this.movieApi
-            .getGenres()
-            .then((res) => {
-                return res.genres;
-            })
-            .then((genresRes) => {
-                this.setState({
-                    genres: genresRes,
-                })
-            })
-    }
-
-    updateData = debounce(
-        () => {
-            this.updateMovie();
-            this.updateGetGenres();
-        },1000
-    )
-
     render() {
 
-        const {data, loading, error, genres} = this.state;
-
+        const {data, loading, error, genres} = this.props;
         const hasData = !(loading || error);
 
         const errorAlert = error ? <Alert
@@ -117,7 +50,8 @@ export default class MovieList extends React.Component {
                     }}
                     grid={{column: 2}}
                     renderItem={(movie, index) => {
-                        const myDate = new Date(movie.release_date);
+                        
+                        const myDate = new Date(movie.releaseDate);
                         const monthNames = [
                             "January", "February", "March", "April", "May", "June",
                             "July", "August", "September", "October", "November", "December"
@@ -133,12 +67,11 @@ export default class MovieList extends React.Component {
                         return (
                             <CardItem
                                 movieTitle={movie.title}
-                                index={index}
-                                movieId={movie.genre_ids}
+                                genreIds={movie.genreIds}
                                 releaseDate={releaseDate}
-                                moviePosterPath={movie.poster_path}
-                                average={movie.vote_average}
-                                movieOverview={movie.overview}
+                                moviePosterPath={movie.moviePosterPath}
+                                average={movie.rating}
+                                movieOverview={movie.movieOverview}
                                 genres={genres}
                             ></CardItem>
                         )
