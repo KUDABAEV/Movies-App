@@ -16,7 +16,7 @@ export default class App extends React.Component {
     totalPages: 0,
     currentPage: 1,
     totalResult: null,
-    loading: true,
+    loading: false,
     error: false,
   };
 
@@ -47,6 +47,10 @@ export default class App extends React.Component {
   };
 
   updateMovie() {
+    this.setState({
+      loading: true,
+    });
+    
     this.movieApi
       .getMovies({ query: this.state.query, page: this.state.currentPage })
       .then((res) => {
