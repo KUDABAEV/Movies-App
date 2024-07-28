@@ -14,6 +14,7 @@ export default class SearchMovies extends React.Component {
             }
         })
 
+        this.props.debounceUpdateMovies(this.state.searchValue)
 
     }
 

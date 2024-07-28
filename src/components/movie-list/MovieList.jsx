@@ -10,6 +10,8 @@ const Spinner = () => {
 };
 
 export default class MovieList extends React.Component {
+
+
   render() {
     const { data, loading, error } = this.props;
     const hasData = !(loading || error);

@@ -2,42 +2,50 @@ export default class MoviesApi {
   _apiBase = "https://api.themoviedb.org/3";
   _apiKey = "1ce8507fa682816e1fab555326740ca7";
 
-  async getMovies(search = "Terminator") {
-    const url = `${this._apiBase}/search/movie?api_key=${this._apiKey}&language=en-US&query=${search}&page=1`;
-    const res = await fetch(url);
+  _allGenresDetailsPromiseCache = null;
+
+  async getMovies(search) {
+    const urlParams = `${this._apiBase}/search/movie?api_key=${this._apiKey}&language=en-US&query=${search}&page=1`;
+    const urlBase = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=1ce8507fa682816e1fab555326740ca7`;
+  
+    const res = await fetch(search ? urlParams : urlBase);
 
     if (!res.ok) {
       throw new Error(`Could not fetch received ${res.status}`);
     }
 
     const data = await res.json();
-  
+
     const transformResultsMovies = await Promise.all(
       data.results.map(this.transformMovie)
     );
 
     data.results = transformResultsMovies;
- 
+
     return data;
   }
 
-  async getGenres() {
-    const res = await fetch(
+  getGenres() {
+    if (this._allGenresDetailsPromiseCache) {
+      return this._allGenresDetailsPromiseCache;
+    }
+
+    this._allGenresDetailsPromiseCache = fetch(
       `${this._apiBase}/genre/movie/list?api_key=${this._apiKey}&language=en-US`
-    );
+    )
+      .then((res) => res.json())
+      .then((data) => data.genres);
 
-    const data = await res.json();
-
-    return data.genres;
+    return this._allGenresDetailsPromiseCache;
   }
 
   transformMovie = async (movie) => {
     const allGenres = await this.getGenres();
-    
-    const genres = movie.genre_ids.map(genreId => {
-      return allGenres.find(genre => genre.id === genreId)
+
+    const genres = movie.genre_ids.map((genreId) => {
+      return allGenres.find((genre) => genre.id === genreId);
     });
-    
+
     return {
       id: movie.id,
       title: movie.title,

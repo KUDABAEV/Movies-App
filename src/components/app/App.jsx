@@ -35,19 +35,18 @@ export default class App extends React.Component {
     });
   };
 
-  updateMovie() {
+  updateMovie(searchValue) {
     this.movieApi
-      .getMovies(this.props.searchValue)
+      .getMovies(searchValue)
       .then((res) => {
         return res.results;
       })
       .then(this.onMoviesLoaded)
       .catch(this.onError);
-
   }
 
-  debounceUpdateMovies = debounce(() => {
-    this.updateMovie();
+  debounceUpdateMovies = debounce((searchValue) => {
+    this.updateMovie(searchValue);
   }, 1000);
 
   render() {
@@ -62,7 +61,9 @@ export default class App extends React.Component {
               label: "Search",
               children: (
                 <>
-                  <SearchMovies />
+                  <SearchMovies
+                    debounceUpdateMovies={this.debounceUpdateMovies}
+                  />
                   <MovieList {...this.state} />
                 </>
               ),
