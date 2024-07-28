@@ -4,11 +4,13 @@ export default class MoviesApi {
 
   _allGenresDetailsPromiseCache = null;
 
-  async getMovies(search) {
-    const urlParams = `${this._apiBase}/search/movie?api_key=${this._apiKey}&language=en-US&query=${search}&page=1`;
-    const urlBase = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=1ce8507fa682816e1fab555326740ca7`;
-  
-    const res = await fetch(search ? urlParams : urlBase);
+  async getMovies({ query, page }) {
+    if (query === '') {
+      query = "Terminator";
+    }
+    const urlParams = `${this._apiBase}/search/movie?api_key=${this._apiKey}&language=en-US&query=${query}&page=${page}`;
+
+    const res = await fetch(urlParams);
 
     if (!res.ok) {
       throw new Error(`Could not fetch received ${res.status}`);

@@ -15,6 +15,10 @@
     line-height: 22px;
     color: #000000;
 }
+.custom-pagination {
+    display: flex;
+    justify-content: center;
+}
 
 .custom-pagination .ant-pagination-item-active a {
     color: white; /* Цвет текста ссылки активного элемента */

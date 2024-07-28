@@ -1,32 +1,13 @@
 import React from "react";
-import {Input} from "antd";
-import './search-movies.css';
+import { Input } from "antd";
+import "./search-movies.css";
 
-export default class SearchMovies extends React.Component {
-    state = {
-        searchValue: '',
-    };
-
-    changeSearchValue(newValue) {
-        this.setState(() => {
-            return {
-                searchValue: newValue,
-            }
-        })
-
-        this.props.debounceUpdateMovies(this.state.searchValue)
-
-    }
-
-    render() {
-        const {searchValue} = this.state;
-
-        return (
-            <Input
-                value={searchValue}
-                placeholder="Type to search..."
-                onChange={(e) => this.changeSearchValue(e.target.value)}
-            />
-        )
-    }
+export default function SearchMovies({ query, updateQuery }) {
+  return (
+    <Input
+      value={query}
+      onChange={(e) => updateQuery(e.target.value)}
+      placeholder="Type to search..."
+    />
+  );
 }

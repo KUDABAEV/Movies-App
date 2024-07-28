@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, ConfigProvider, List, Spin } from "antd";
+import { Alert, List, Pagination, Spin } from "antd";
 import "./movie-list.css";
 import CardItem from "../card";
 
@@ -18,30 +18,12 @@ const NoResultsAlert = () => {
 };
 
 const MovieListContent = ({ data }) => {
-  const themeConfig = {
-    components: {
-      Pagination: {
-        itemActiveBg: "#1890FF",
-        itemBg: "#f0f0f0",
-        itemColor: "#000",
-      },
-    },
-  };
-
-  const paginationConfig = {
-    align: "center",
-    className: "custom-pagination",
-  };
-
   return (
-    <ConfigProvider theme={themeConfig}>
-      <List
-        pagination={paginationConfig}
-        grid={{ column: 2 }}
-        renderItem={(movie) => <CardItem {...movie} />}
-        dataSource={data}
-      />
-    </ConfigProvider>
+    <List
+      grid={{ column: 2 }}
+      renderItem={(movie) => <CardItem {...movie} />}
+      dataSource={data}
+    />
   );
 };
 
@@ -53,6 +35,16 @@ export default class MovieList extends React.Component {
         {this.props.loading && <Spinner />}
         {this.props.totalResult === 0 && <NoResultsAlert />}
         {this.props.data && <MovieListContent data={this.props.data} />}
+
+        <Pagination
+          className="custom-pagination"
+          defaultCurrent={1}
+          current={this.props.currentPage}
+          total={this.props.totalPages * 20}
+          onChange={this.props.goNextPage}
+          showSizeChanger={false}
+          pageSize={20}
+        />
       </div>
     );
   }

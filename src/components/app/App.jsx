@@ -12,6 +12,7 @@ export default class App extends React.Component {
 
   state = {
     data: [],
+    query: "",
     totalPages: 0,
     currentPage: 1,
     totalResult: null,
@@ -23,9 +24,31 @@ export default class App extends React.Component {
     this.debounceUpdateMovies();
   }
 
-  updateMovie(searchValue) {
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.currentPage !== this.state.currentPage ||
+      prevState.query !== this.state.query
+    ) {
+      this.debounceUpdateMovies();
+    }
+  }
+
+  updateQuery = (query) => {
+    this.setState({
+      query,
+      currentPage: 1,
+    });
+  };
+
+  goNextPage = (newPage) => {
+    this.setState({
+      currentPage: newPage,
+    });
+  };
+
+  updateMovie() {
     this.movieApi
-      .getMovies(searchValue)
+      .getMovies({ query: this.state.query, page: this.state.currentPage })
       .then((res) => {
         this.setState({
           data: res.results,
@@ -47,8 +70,8 @@ export default class App extends React.Component {
       });
   }
 
-  debounceUpdateMovies = debounce((searchValue) => {
-    this.updateMovie(searchValue);
+  debounceUpdateMovies = debounce(() => {
+    this.updateMovie();
   }, 1000);
 
   render() {
@@ -64,9 +87,10 @@ export default class App extends React.Component {
               children: (
                 <>
                   <SearchMovies
-                    debounceUpdateMovies={this.debounceUpdateMovies}
+                    query={this.state.query}
+                    updateQuery={this.updateQuery}
                   />
-                  <MovieList {...this.state} />
+                  <MovieList {...this.state} goNextPage={this.goNextPage} />
                 </>
               ),
             },
