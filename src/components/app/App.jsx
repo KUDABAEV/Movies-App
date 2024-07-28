@@ -7,6 +7,28 @@ import MoviesApi from "../../api/Movies-api";
 import debounce from "lodash/debounce";
 import "./app.css";
 
+const TabSearch = ({ state, goNextPage, updateQuery, query }) => {
+  console.log({ state, goNextPage, updateQuery, query });
+  return {
+    key: "1",
+    label: "Search",
+    children: (
+      <>
+        <SearchMovies query={query} updateQuery={updateQuery} />
+        <MovieList {...state} goNextPage={goNextPage} />
+      </>
+    ),
+  };
+};
+
+const TabRated = () => {
+  return {
+    key: "2",
+    label: "Rated",
+    children: <Rated />,
+  };
+};
+
 export default class App extends React.Component {
   movieApi = new MoviesApi();
 
@@ -50,7 +72,7 @@ export default class App extends React.Component {
     this.setState({
       loading: true,
     });
-    
+
     this.movieApi
       .getMovies({ query: this.state.query, page: this.state.currentPage })
       .then((res) => {
