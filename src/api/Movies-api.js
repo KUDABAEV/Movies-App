@@ -11,19 +11,13 @@ export default class MoviesApi {
     }
 
     const data = await res.json();
+  
+    const transformResultsMovies = await Promise.all(
+      data.results.map(this.transformMovie)
+    );
 
-    data.results = data.results.map((movie) => {
-      return {
-        id: movie.id,
-        title: movie.title,
-        releaseDate: movie.release_date,
-        genreIds: movie.genre_ids,
-        moviePosterPath: movie.poster_path,
-        rating: movie.vote_average,
-        movieOverview: movie.overview,
-      };
-    });
-
+    data.results = transformResultsMovies;
+ 
     return data;
   }
 
@@ -31,6 +25,27 @@ export default class MoviesApi {
     const res = await fetch(
       `${this._apiBase}/genre/movie/list?api_key=${this._apiKey}&language=en-US`
     );
-    return res.json();
+
+    const data = await res.json();
+
+    return data.genres;
   }
+
+  transformMovie = async (movie) => {
+    const allGenres = await this.getGenres();
+    
+    const genres = movie.genre_ids.map(genreId => {
+      return allGenres.find(genre => genre.id === genreId)
+    });
+    
+    return {
+      id: movie.id,
+      title: movie.title,
+      releaseDate: movie.release_date,
+      genres,
+      moviePosterPath: movie.poster_path,
+      rating: movie.vote_average,
+      movieOverview: movie.overview,
+    };
+  };
 }

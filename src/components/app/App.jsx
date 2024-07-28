@@ -14,11 +14,10 @@ export default class App extends React.Component {
     data: [],
     loading: true,
     error: false,
-    genres: [],
   };
 
   componentDidMount() {
-    this.updateData();
+    this.debounceUpdateMovies();
   }
 
   onMoviesLoaded = (movies) => {
@@ -47,22 +46,8 @@ export default class App extends React.Component {
 
   }
 
-  updateGetGenres() {
-    this.movieApi
-      .getGenres()
-      .then((res) => {
-        return res.genres;
-      })
-      .then((genresRes) => {
-        this.setState({
-          genres: genresRes,
-        });
-      });
-  }
-
-  updateData = debounce(() => {
+  debounceUpdateMovies = debounce(() => {
     this.updateMovie();
-    this.updateGetGenres();
   }, 1000);
 
   render() {
