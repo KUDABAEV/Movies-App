@@ -42,6 +42,36 @@ export default class CardItem extends React.Component {
       genres,
     } = this.props;
 
+    const myDate = new Date(releaseDate);
+            
+            const monthNames = [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December",
+            ];
+
+            let transformDate;
+
+            if (myDate instanceof Date && !isNaN(myDate)) {
+                transformDate =
+                monthNames[myDate.getMonth()] +
+                " " +
+                myDate.getDate() +
+                ", " +
+                myDate.getFullYear();
+            } else {
+                transformDate = "March 5, 2020";
+            }
+
     return (
       <Card
         key={id}
@@ -72,7 +102,7 @@ export default class CardItem extends React.Component {
               strokeColor={progressColor(rating)}
             />
             <div className="movieTitle">{title}</div>
-            <p className="movieDate">{releaseDate}</p>
+            <p className="movieDate">{transformDate}</p>
             <BadgesList list={genres} />
             <Typography.Paragraph
               ellipsis={{ rows: 4 }}

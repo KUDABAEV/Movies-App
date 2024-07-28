@@ -12,6 +12,9 @@ export default class App extends React.Component {
 
   state = {
     data: [],
+    totalPages: 0,
+    currentPage: 1,
+    totalResult: null,
     loading: true,
     error: false,
   };
@@ -20,29 +23,28 @@ export default class App extends React.Component {
     this.debounceUpdateMovies();
   }
 
-  onMoviesLoaded = (movies) => {
-    this.setState({
-      data: movies,
-      loading: false,
-      error: false,
-    });
-  };
-
-  onError = () => {
-    this.setState({
-      error: true,
-      loading: false,
-    });
-  };
-
   updateMovie(searchValue) {
     this.movieApi
       .getMovies(searchValue)
       .then((res) => {
-        return res.results;
+        this.setState({
+          data: res.results,
+          totalPages: res.total_pages,
+          totalResult: res.total_results,
+        });
       })
-      .then(this.onMoviesLoaded)
-      .catch(this.onError);
+
+      .catch(() => {
+        this.setState({
+          error: true,
+        });
+      })
+
+      .finally(() => {
+        this.setState({
+          loading: false,
+        });
+      });
   }
 
   debounceUpdateMovies = debounce((searchValue) => {
