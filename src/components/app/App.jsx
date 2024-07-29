@@ -3,9 +3,17 @@ import { Tabs } from "antd";
 import "./app.css";
 import TabRating from "../tabRating/TabRating";
 import TabSearch from "../tabSearch/TabSearch";
+import MoviesApi from "./../../api/Movies-api";
 
 export default class App extends React.Component {
-  state = {};
+  movieApi = MoviesApi;
+  state = {
+    token: null,
+  };
+
+  componentDidMount() {
+  
+  }
 
   render() {
     const tabs = [

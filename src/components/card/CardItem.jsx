@@ -31,46 +31,63 @@ const customFormat = (percent) => {
 };
 
 export default class CardItem extends React.Component {
+  onClisckRated = (rating) => {
+    console.log(rating, this.props.rating);
+    if (rating === 0) {
+      if (this.props.deleteRatedMovie) {
+        this.props.deleteRatedMovie({ id: this.props.id });
+      } else {
+        alert("deleteRatedMovie is not defined");
+      }
+    } else {
+      if (this.props.changeRatedMovie) {
+        this.props.changeRatedMovie({ id: this.props.id, rating });
+      } else {
+        alert("changeRatedMovie is not defined");
+      }
+    }
+  };
+
   render() {
     const {
       id,
       releaseDate,
       moviePosterPath,
-      rating,
+      vote,
       title,
       movieOverview,
       genres,
     } = this.props;
 
     const myDate = new Date(releaseDate);
-            
-            const monthNames = [
-              "January",
-              "February",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December",
-            ];
 
-            let transformDate;
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
 
-            if (myDate instanceof Date && !isNaN(myDate)) {
-                transformDate =
-                monthNames[myDate.getMonth()] +
-                " " +
-                myDate.getDate() +
-                ", " +
-                myDate.getFullYear();
-            } else {
-                transformDate = "March 5, 2020";
-            }
+    let transformDate;
+
+    if (myDate instanceof Date && !isNaN(myDate)) {
+      transformDate =
+        monthNames[myDate.getMonth()] +
+        " " +
+        myDate.getDate() +
+        ", " +
+        myDate.getFullYear();
+    } else {
+      transformDate = "March 5, 2020";
+    }
 
     return (
       <Card
@@ -96,10 +113,10 @@ export default class CardItem extends React.Component {
             <Progress
               className="movieProgress"
               type="circle"
-              percent={rating * 10}
+              percent={vote * 10}
               format={customFormat}
               size={50}
-              strokeColor={progressColor(rating)}
+              strokeColor={progressColor(vote)}
             />
             <div className="movieTitle">{title}</div>
             <p className="movieDate">{transformDate}</p>
@@ -110,7 +127,12 @@ export default class CardItem extends React.Component {
             >
               {movieOverview}
             </Typography.Paragraph>
-            <Rate className="rate" count={10} />
+            <Rate
+              className="rate"
+              value={this.props.rating}
+              count={10}
+              onChange={this.onClisckRated}
+            />
           </div>
         </div>
       </Card>

@@ -6,7 +6,7 @@ import MovieList from "../movie-list";
 import MoviesApi from "../../api/Movies-api";
 
 export default class TabSearch extends React.Component {
-  movieApi = new MoviesApi();
+  movieApi = MoviesApi;
 
   state = {
     data: [],
@@ -15,7 +15,7 @@ export default class TabSearch extends React.Component {
     currentPage: 1,
     totalResult: null,
     loading: false,
-    error: false,
+    error: null,
   };
 
   componentDidMount() {
@@ -30,6 +30,10 @@ export default class TabSearch extends React.Component {
       this.debounceUpdateMovies();
     }
   }
+
+  changeRatedMovie = ({ id, rating }) => {
+    this.movieApi.addRatedMovie({ id, rating });
+  };
 
   updateQuery = (query) => {
     this.setState({
@@ -59,9 +63,9 @@ export default class TabSearch extends React.Component {
         });
       })
 
-      .catch(() => {
+      .catch((error) => {
         this.setState({
-          error: true,
+          error: error.message,
         });
       })
 
@@ -80,7 +84,11 @@ export default class TabSearch extends React.Component {
     return (
       <>
         <SearchMovies query={this.state.query} updateQuery={this.updateQuery} />
-        <MovieList {...this.state} goNextPage={this.goNextPage} />
+        <MovieList
+          {...this.state}
+          goNextPage={this.goNextPage}
+          changeRatedMovie={this.changeRatedMovie}
+        />
       </>
     );
   }

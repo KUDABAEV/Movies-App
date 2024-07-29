@@ -5,7 +5,7 @@ import { debounce } from "lodash";
 import MoviesApi from "../../api/Movies-api";
 
 export default class TabRating extends React.Component {
-  movieApi = new MoviesApi();
+  movieApi = MoviesApi;
 
   state = {
     data: [],
@@ -13,18 +13,22 @@ export default class TabRating extends React.Component {
     currentPage: 1,
     totalResult: null,
     loading: false,
-    error: false,
+    error: null,
   };
 
   componentDidMount() {
-    this.debounceUpdateMovies();
+    this.debounceUpdateMoviesRated();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.currentPage !== this.state.currentPage) {
-      this.debounceUpdateMovies();
+      this.debounceUpdateMoviesRated();
     }
   }
+
+  deleteRatedMovie = ({ id }) => {
+    this.movieApi.deleteRatedMovie({ id });
+  };
 
   goNextPage = (newPage) => {
     this.setState({
@@ -32,14 +36,15 @@ export default class TabRating extends React.Component {
     });
   };
 
-  updateMovie() {
+  updateMoviesRated() {
     this.setState({
       loading: true,
     });
 
     this.movieApi
-      .getMovies({ query: this.state.query, page: this.state.currentPage })
+      .getRatedMovies({ page: this.state.currentPage })
       .then((res) => {
+
         this.setState({
           data: res.results,
           totalPages: res.total_pages,
@@ -47,9 +52,9 @@ export default class TabRating extends React.Component {
         });
       })
 
-      .catch(() => {
+      .catch((err) => {
         this.setState({
-          error: true,
+          error: err.message,
         });
       })
 
@@ -60,14 +65,18 @@ export default class TabRating extends React.Component {
       });
   }
 
-  debounceUpdateMovies = debounce(() => {
-    this.updateMovie();
+  debounceUpdateMoviesRated = debounce(() => {
+    this.updateMoviesRated();
   }, 1000);
 
   render() {
     return (
       <>
-        <MovieList {...this.state} goNextPage={this.goNextPage} />
+        <MovieList
+          {...this.state}
+          goNextPage={this.goNextPage}
+          deleteRatedMovie={this.deleteRatedMovie}
+        />
       </>
     );
   }
