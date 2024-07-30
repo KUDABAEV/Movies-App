@@ -1,10 +1,11 @@
 import React from 'react';
-import './tab-rating.css';
-import MovieList from '../movie-list';
 import { debounce } from 'lodash';
-import { MoviesService } from '../../api/MoviesService';
+
+import MovieList from '../movie-list';
 import { SessionService } from '../../api/SessionService';
 import { RatedService } from '../../api/RatedService';
+
+import './tab-rating.css';
 
 export default class TabRating extends React.Component {
 	state = {
@@ -29,6 +30,10 @@ export default class TabRating extends React.Component {
 	deleteRatedMovie = ({ id }) => {
 		const token = SessionService.getTokenFromSessionStorage().guest_session_id;
 		RatedService.deleteRatedMovie({ id, token });
+
+		this.setState({
+			data: this.state.data.filter((movie) => movie.id !== id),
+		});
 	};
 
 	goNextPage = (newPage) => {

@@ -1,25 +1,7 @@
 import { BASE_API_URL, API_KEY } from './api.js';
 import { transformResultsMovies } from './utilsMovie.js';
+
 class Rated {
-	transformMovie = async (movie) => {
-		const allGenres = await this.getGenres();
-
-		const genres = movie.genre_ids.map((genreId) => {
-			return allGenres.find((genre) => genre.id === genreId);
-		});
-
-		return {
-			id: movie.id,
-			title: movie.title,
-			releaseDate: movie.release_date,
-			genres,
-			moviePosterPath: movie.poster_path,
-			vote: movie.vote_average,
-			rating: movie.rating,
-			movieOverview: movie.overview,
-		};
-	};
-
 	getRatedMovies = async ({ page, token }) => {
 		const url = `${BASE_API_URL}/guest_session/${token}/rated/movies?api_key=${API_KEY}&page=${page}`;
 		const res = await fetch(url);
@@ -39,6 +21,18 @@ class Rated {
 		}
 
 		data.results = await transformResultsMovies(data.results);
+
+		return data;
+	};
+
+	getRatedMoviesAll = async ({ token }) => {
+		const response = await this.getRatedMovies({ page: 1, token });
+		let data = response.results;
+
+		for (let i = 2; i <= response.total_pages; i++) {
+			const res = await this.getRatedMovies({ page: i, token });
+			data = data.concat(res.results);
+		}
 
 		return data;
 	};

@@ -4,9 +4,10 @@ import { debounce } from 'lodash';
 import SearchMovies from '../searchMovies';
 import MovieList from '../movie-list';
 import { MoviesService } from '../../api/MoviesService.js';
-import './tab-search.css';
 import { SessionService } from '../../api/SessionService.js';
 import { RatedService } from '../../api/RatedService.js';
+
+import './tab-search.css';
 
 export default class TabSearch extends React.Component {
 	state = {
@@ -35,6 +36,16 @@ export default class TabSearch extends React.Component {
 	changeRatedMovie = ({ id, rating }) => {
 		const token = SessionService.getTokenFromSessionStorage().guest_session_id;
 		RatedService.addRatedMovie({ id, rating, token });
+
+		this.setState({
+			data: this.state.data.map((movie) => {
+				if (movie.id === id) {
+					return { ...movie, rating };
+				}
+
+				return movie;
+			}),
+		});
 	};
 
 	updateQuery = (query) => {
