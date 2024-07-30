@@ -1,38 +1,33 @@
-import React from "react";
-import { Tabs } from "antd";
-import "./app.css";
-import TabRating from "../tabRating/TabRating";
-import TabSearch from "../tabSearch/TabSearch";
-import MoviesApi from "./../../api/Movies-api";
+import React from 'react';
+import { Tabs } from 'antd';
+
+import TabRating from '../tabRating/TabRating';
+import TabSearch from '../tabSearch/TabSearch';
+import { SessionService } from '../../api/SessionService.js';
 
 export default class App extends React.Component {
-  movieApi = MoviesApi;
-  state = {
-    token: null,
-  };
+	componentDidMount() {
+		SessionService.initTokenGuestSession();
+	}
 
-  componentDidMount() {
-  
-  }
+	render() {
+		const tabs = [
+			{
+				key: '1',
+				label: 'Search',
+				children: <TabSearch />,
+			},
+			{
+				key: '2',
+				label: 'Rated',
+				children: <TabRating />,
+			},
+		];
 
-  render() {
-    const tabs = [
-      {
-        key: "1",
-        label: "Search",
-        children: <TabSearch />,
-      },
-      {
-        key: "2",
-        label: "Rated",
-        children: <TabRating />,
-      },
-    ];
-
-    return (
-      <div className="container">
-        <Tabs centered={true} defaultActiveKey="1" items={tabs} />
-      </div>
-    );
-  }
+		return (
+			<div className="container">
+				<Tabs centered={true} defaultActiveKey="1" items={tabs} />
+			</div>
+		);
+	}
 }
