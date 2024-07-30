@@ -31,8 +31,7 @@ const customFormat = (percent) => {
 };
 
 export default class CardItem extends React.Component {
-	onClisckRated = (rating) => {
-		console.log(rating, this.props.rating);
+	onClickRated = (rating) => {
 		if (rating === 0) {
 			if (this.props.deleteRatedMovie) {
 				this.props.deleteRatedMovie({ id: this.props.id });
@@ -114,7 +113,7 @@ export default class CardItem extends React.Component {
 							className="rate"
 							value={this.props.rating}
 							count={10}
-							onChange={this.onClisckRated}
+							onChange={this.onClickRated}
 						/>
 					</div>
 				</div>

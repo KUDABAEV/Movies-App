@@ -3,9 +3,10 @@ import { debounce } from 'lodash';
 
 import SearchMovies from '../searchMovies';
 import MovieList from '../movie-list';
-import { MoviesService } from '../../api/MoviesService.js';
+import { MoviesSearchService } from '../../api/MoviesSearchService.js';
 import { SessionService } from '../../api/SessionService.js';
 import { RatedService } from '../../api/RatedService.js';
+import { MoviesService } from '../../api/MoviesService.js';
 
 import './tab-search.css';
 
@@ -62,11 +63,12 @@ export default class TabSearch extends React.Component {
 	};
 
 	updateMovie() {
+		const Api = this.state.query === '' ? MoviesService : MoviesSearchService;
 		this.setState({
 			loading: true,
 		});
 
-		MoviesService.getMovies({
+		Api.getMovies({
 			query: this.state.query,
 			page: this.state.currentPage,
 		})
