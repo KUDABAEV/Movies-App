@@ -1,3 +1,3 @@
-import PageMovies from "./PageMovies.jsx";
+import PageMovies from './PageMovies.jsx';
 
 export default PageMovies;

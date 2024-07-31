@@ -1,3 +1,3 @@
-import SearchMovies from "./SearchMovies";
+import SearchMovies from './SearchMovies';
 
 export default SearchMovies;

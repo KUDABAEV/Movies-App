@@ -1,18 +1,26 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Inter',sans-serif;
+  font-family: 'Inter', sans-serif;
 }
-h1,h2,h3,h4,h5,h6, p, figure, fieldset {
-    margin: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+fieldset {
+  margin: 0;
 }
 
 .container {
-    max-width: 1030px;
-    padding: 0 10px;
-    margin: 0 auto;
+  max-width: 1030px;
+  padding: 0 10px;
+  margin: 0 auto;
 }

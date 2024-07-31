@@ -1,25 +1,24 @@
 .moviesList {
-    padding: 36px 0;
+  padding: 36px 0;
 }
 
-
 .movieDate {
-    font-size: 12px;
-    line-height: 22px;
-    color: #827E7E;
-    /*margin-bottom: 7px;*/
+  font-size: 12px;
+  line-height: 22px;
+  color: #827e7e;
+  /*margin-bottom: 7px;*/
 }
 
 .movieDescription {
-    font-size: 12px;
-    line-height: 22px;
-    color: #000000;
+  font-size: 12px;
+  line-height: 22px;
+  color: #000000;
 }
 .custom-pagination {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .custom-pagination .ant-pagination-item-active a {
-    color: white; /* Цвет текста ссылки активного элемента */
+  color: white; /* Цвет текста ссылки активного элемента */
 }
