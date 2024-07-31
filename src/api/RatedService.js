@@ -21,7 +21,6 @@ class Rated {
 		}
 
 		data.results = await transformResultsMovies(data.results);
-
 		return data;
 	};
 

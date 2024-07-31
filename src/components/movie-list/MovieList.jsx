@@ -22,10 +22,7 @@ const MovieListContent = ({ data, changeRatedMovie }) => {
 		<List
 			grid={{ column: 2 }}
 			renderItem={(movie) => (
-				<CardItem
-					{...movie}
-					changeRatedMovie={changeRatedMovie}
-				/>
+				<CardItem {...movie} changeRatedMovie={changeRatedMovie} />
 			)}
 			dataSource={data}
 		/>
@@ -38,7 +35,7 @@ export default class MovieList extends React.Component {
 			<div className="moviesList">
 				{this.props.error && <ErrorAlert text={this.props.error} />}
 				{this.props.loading && <Spinner />}
-				{this.props.totalResult === 0 && <NoResultsAlert />}
+				{this.props.data.length === 0 && <NoResultsAlert />}
 				{this.props.data && (
 					<MovieListContent
 						data={this.props.data}
