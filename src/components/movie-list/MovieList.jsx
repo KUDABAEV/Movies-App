@@ -3,10 +3,7 @@ import { Alert, List, Pagination } from 'antd';
 import './movie-list.css';
 import CardItem from '../card';
 import { Spinner } from '../spinner/Spinner';
-
-const ErrorAlert = ({ text = 'Ошибка при получении данных' }) => {
-  return <Alert showIcon message={text} type="error" />;
-};
+import ErrorAlert from '../error/ErrorAlert';
 
 const NoResultsAlert = () => {
   return <Alert showIcon message="Ничего не найдено" type="info" />;

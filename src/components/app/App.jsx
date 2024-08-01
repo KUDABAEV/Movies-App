@@ -3,6 +3,7 @@ import React from 'react';
 import PageMovies from '../pageMovies';
 import { SessionService } from '../../api/SessionService';
 import { Spinner } from '../spinner/Spinner';
+import ErrorAlert from '../error/ErrorAlert';
 
 const themeConfig = {
   components: {
@@ -17,17 +18,27 @@ const themeConfig = {
 export default class App extends React.Component {
   state = {
     loading: true,
+    error: null,
   };
 
   componentDidMount() {
-    SessionService.initTokenGuestSession().then(() => {
-      this.setState({
-        loading: false,
+    SessionService.initTokenGuestSession()
+      .catch((error) => {
+        this.setState({
+          error,
+        });
+      })
+      .finally(() => {
+        this.setState({ loading: false });
       });
-    });
   }
 
   render() {
-    return <ConfigProvider theme={themeConfig}>{this.state.loading ? <Spinner /> : <PageMovies />}</ConfigProvider>;
+    return (
+      <ConfigProvider theme={themeConfig}>
+        {this.state.loading ? <Spinner /> : <PageMovies />}
+        {this.state.error && <ErrorAlert text={this.state.error} />}
+      </ConfigProvider>
+    );
   }
 }
