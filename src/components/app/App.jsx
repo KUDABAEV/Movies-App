@@ -27,6 +27,10 @@ export default class App extends React.Component {
         this.setState({
           error,
         });
+
+        SessionService.initTokenGuestSession().then(() => {
+          this.setState({ loading: false });
+        });
       })
       .finally(() => {
         this.setState({ loading: false });
