@@ -33,7 +33,6 @@ export default class PageMovies extends React.Component {
   };
 
   componentDidMount() {
-    SessionService.initTokenGuestSession();
     this.token = SessionService.getTokenFromSessionStorage().guest_session_id;
     this.debounceUpdateMovies();
     this.updateMovieRated();

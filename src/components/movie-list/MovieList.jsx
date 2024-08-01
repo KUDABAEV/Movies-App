@@ -1,11 +1,8 @@
 import React from 'react';
-import { Alert, List, Pagination, Spin } from 'antd';
+import { Alert, List, Pagination } from 'antd';
 import './movie-list.css';
 import CardItem from '../card';
-
-const Spinner = () => {
-  return <Spin tip="loading" fullscreen={true} className="spinner" spinning={true} />;
-};
+import { Spinner } from '../spinner/Spinner';
 
 const ErrorAlert = ({ text = 'Ошибка при получении данных' }) => {
   return <Alert showIcon message={text} type="error" />;
