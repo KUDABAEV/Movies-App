@@ -4,6 +4,7 @@
   flex-direction: column;
   justify-content: space-around;
   gap: 5px;
+  padding: 16px;
 }
 .movieProgress {
   position: absolute;
@@ -45,14 +46,73 @@
   /*margin-bottom: 7px;*/
   padding-right: 50px;
 }
+.movieDate {
+  margin-bottom: 7px;
+}
 
 .movieItemInner {
   height: 281px;
   display: flex;
+  width: 100%;
 }
 
 .rate {
   white-space: nowrap;
   align-self: flex-start;
-  /*padding-top: 15px;*/
+}
+.movieImgMobile {
+  display: none;
+}
+
+@media (max-width: 1068px) {
+  .movieProgress {
+    right: 40px;
+  }
+}
+
+@media (max-width: 1010px) {
+  .movieContent {
+    padding: 6px 10px;
+  }
+  .movieProgress {
+    right: 45px;
+  }
+}
+
+@media (max-width: 992px) {
+  .movieTitle {
+    padding-right: 70px;
+  }
+}
+
+@media (max-width: 640px) {
+  .movieContent {
+    gap: 0px;
+    justify-content: space-between;
+  }
+  .movieTitle {
+    padding-right: 70px;
+  }
+}
+
+@media (max-width: 560px) {
+  .movieImgBlock {
+    display: none;
+  }
+  .movieContentInnerMobile {
+    display: flex;
+    gap: 13px;
+  }
+  .movieImgMobile {
+    display: block;
+    height: 91px;
+    width: 60px;
+  }
+  .rate {
+    align-self: flex-end;
+    padding-bottom: 18px;
+  }
+  .movieProgress {
+    right: 30px;
+  }
 }

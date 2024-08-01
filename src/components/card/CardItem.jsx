@@ -68,10 +68,10 @@ export default class CardItem extends React.Component {
         style={{ borderRadius: 0, height: 279 }}
       >
         <div className="movieItemInner">
-          <div style={{ flex: 1 }}>
+          <div className="movieImgBlock" style={{ flex: 1 }}>
             <img className="movieImg" src={posterPath} alt="movie" />
           </div>
-          <div className="movieContent" style={{ flex: 2, padding: '16px' }}>
+          <div className="movieContent" style={{ flex: 2 }}>
             <Progress
               className="movieProgress"
               type="circle"
@@ -80,9 +80,14 @@ export default class CardItem extends React.Component {
               size={50}
               strokeColor={progressColor(vote)}
             />
-            <div className="movieTitle">{title}</div>
-            <p className="movieDate">{transformDate}</p>
-            <BadgesList list={genres} />
+            <div className="movieContentInnerMobile">
+              <img className="movieImgMobile" src={posterPath} alt="mobileImg" />
+              <div>
+                <div className="movieTitle">{title}</div>
+                <p className="movieDate">{transformDate}</p>
+                <BadgesList list={genres} />
+              </div>
+            </div>
             <Typography.Paragraph ellipsis={{ rows: 4 }} style={{ marginBottom: 0 }}>
               {movieOverview}
             </Typography.Paragraph>

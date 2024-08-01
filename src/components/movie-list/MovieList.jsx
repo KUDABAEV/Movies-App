@@ -18,7 +18,7 @@ const NoResultsAlert = () => {
 const MovieListContent = ({ data, changeRatedMovie }) => {
   return (
     <List
-      grid={{ column: 2 }}
+      grid={{ md: 1, lg: 2, xl: 2, xxl: 2 }}
       renderItem={(movie) => <CardItem {...movie} changeRatedMovie={changeRatedMovie} />}
       dataSource={data}
     />
